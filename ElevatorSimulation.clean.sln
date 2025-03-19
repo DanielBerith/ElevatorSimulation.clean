@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AD309D28-B9DE-49A2-A644-456F6ED65CA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{3241263C-F80F-4C61-BBC7-3030FAE0A2EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{AD0212BE-CAB9-409F-9C1C-EDAB5A49AE64}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{026C05A9-8F24-4A6B-8ACD-E64F6822DCB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7A5E009A-47FF-449D-9221-123B29714845}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Domain", "ElevatorSimulation.Domain\ElevatorSimulation.Domain.csproj", "{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3241263C-F80F-4C61-BBC7-3030FAE0A2EE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AD0212BE-CAB9-409F-9C1C-EDAB5A49AE64} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{026C05A9-8F24-4A6B-8ACD-E64F6822DCB5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7A5E009A-47FF-449D-9221-123B29714845} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB} = {AD0212BE-CAB9-409F-9C1C-EDAB5A49AE64}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F0EB68C-FAE3-4EF9-84C6-84EABA575A40}
+	EndGlobalSection
+EndGlobal
