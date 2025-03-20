@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Domain", "ElevatorSimulation.Domain\ElevatorSimulation.Domain.csproj", "{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Application", "ElevatorSimulation.Application\ElevatorSimulation.Application.csproj", "{E85AF5CA-A29C-4862-9727-338B4F719AE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +43,7 @@ Global
 		{026C05A9-8F24-4A6B-8ACD-E64F6822DCB5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{7A5E009A-47FF-449D-9221-123B29714845} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB} = {AD0212BE-CAB9-409F-9C1C-EDAB5A49AE64}
+		{E85AF5CA-A29C-4862-9727-338B4F719AE3} = {3241263C-F80F-4C61-BBC7-3030FAE0A2EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F0EB68C-FAE3-4EF9-84C6-84EABA575A40}

@@ -30,5 +30,29 @@ namespace ElevatorSimulation.Domain.Entities
         public Direction GetDirection() => Direction;
         public int GetOccupants() => Occupants;
         public int GetMaxCapacity() => MaxCapacity;
+
+        public bool TryBoardPassengers(int people)
+        {
+            if (Occupants + people <= MaxCapacity)
+            {
+                Occupants += people;
+                return true;
+            }
+            return false; // Not enough space
+        }
+
+        public void MoveToFloor(int targetFloor)
+        {
+            if (CurrentFloor < targetFloor)
+                Direction = Direction.Up;
+            else if (CurrentFloor > targetFloor)
+                Direction = Direction.Down;
+            else
+                Direction = Direction.Idle;
+
+            Console.WriteLine($"Elevator {Id} moving {Direction} to floor {targetFloor}");
+            CurrentFloor = targetFloor;
+            Direction = Direction.Idle;
+        }
     }
 }
