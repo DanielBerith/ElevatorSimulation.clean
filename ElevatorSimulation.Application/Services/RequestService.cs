@@ -11,28 +11,31 @@ namespace ElevatorSimulation.Application.Services
     public class RequestService : IRequestService
     {
         private readonly IElevatorService _elevatorService;
-
-        public RequestService(IElevatorService elevatorService)
+        private readonly IDispatchingStrategy _dispatchingStrategy;
+        public RequestService(IElevatorService elevatorService, IDispatchingStrategy dispatchingStrategy)
         {
             _elevatorService = elevatorService;
+            _dispatchingStrategy = dispatchingStrategy;
         }
 
         public void DispatchElevator(List<Elevator> elevators, Request request)
         {
-            var closestElevator = elevators
-                .OrderBy(e => Math.Abs(e.GetCurrentFloor() - request.Floor))
-                .FirstOrDefault();
+            // Use the dispatching strategy to select the elevator
+            var selectedElevator = _dispatchingStrategy.DispatchElevator(elevators, request.Floor);
 
-            if (closestElevator != null)
+            if (selectedElevator != null)
             {
-                _elevatorService.MoveElevator(closestElevator, request.Floor);
-                if (_elevatorService.TryBoardPassengers(closestElevator, request.Passengers))
+                // Move the selected elevator to the requested floor
+                _elevatorService.MoveElevator(selectedElevator, request.Floor);
+
+                // Attempt to board passengers
+                if (_elevatorService.TryBoardPassengers(selectedElevator, request.Passengers))
                 {
-                    Console.WriteLine($"Elevator {closestElevator.Id} boarded {request.Passengers} passengers.");
+                    Console.WriteLine($"Elevator {selectedElevator.Id} boarded {request.Passengers} passengers.");
                 }
                 else
                 {
-                    Console.WriteLine($"Elevator {closestElevator.Id} cannot board {request.Passengers} passengers. It's full!");
+                    Console.WriteLine($"Elevator {selectedElevator.Id} cannot board {request.Passengers} passengers. It's full!");
                 }
             }
             else

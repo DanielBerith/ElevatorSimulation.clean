@@ -41,7 +41,7 @@ namespace ElevatorSimulation.Domain.Entities
             return false; // Not enough space
         }
 
-        public void MoveToFloor(int targetFloor)
+        public virtual void MoveToFloor(int targetFloor)
         {
             if (CurrentFloor < targetFloor)
                 Direction = Direction.Up;
