@@ -13,6 +13,8 @@ namespace ElevatorSimulation.Application.Services
     {
         private readonly IDispatchingStrategy _dispatchingStrategy;
         private readonly RequestQueue _requestQueue;
+
+        // Constructor takes both the dispatch strategy and the request queue
         public ElevatorService(IDispatchingStrategy dispatchingStrategy, RequestQueue requestQueue)
         {
             _dispatchingStrategy = dispatchingStrategy;
@@ -30,39 +32,45 @@ namespace ElevatorSimulation.Application.Services
         }
 
         // Process requests by dispatching the nearest elevator for the next request in the queue
-        public void ProcessNextRequest(List<Elevator> elevators)
+        public void ProcessNextRequest(Elevator elevator)
         {
-            // Get the next request from the queue
-            var nextRequest = _requestQueue.DequeueNearestRequest(elevators.First().GetCurrentFloor());
+            // Set initial direction based on the first request in the queue
+            Direction currentDirection = Direction.Idle;
 
-            if (nextRequest != null)
+            // Get the first request to decide the initial direction
+            var firstRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
+
+            if (firstRequest != null)
             {
-                // Use the dispatch strategy to get the closest elevator
-                var elevator = _dispatchingStrategy.DispatchElevator(elevators, nextRequest.Floor);
+                currentDirection = firstRequest.Floor > elevator.GetCurrentFloor() ? Direction.Up : Direction.Down;
+                Console.WriteLine($"Elevator {elevator.Id} direction set to {currentDirection}");
 
-                if (elevator != null)
+                // Move elevator based on the direction
+                while (firstRequest != null)
                 {
-                    // Move the elevator to the requested floor
-                    MoveElevator(elevator, nextRequest.Floor);
-
-                    // Try to board passengers
-                    if (TryBoardPassengers(elevator, nextRequest.Passengers))
+                    // Get the nearest request based on the current direction
+                    var nextRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
+                    if (nextRequest != null)
                     {
-                        Console.WriteLine($"Elevator {elevator.Id} boarded {nextRequest.Passengers} passengers.");
+                        // Move the elevator to the requested floor
+                        MoveElevator(elevator, nextRequest.Floor);
+
+                        // Try to board passengers
+                        if (TryBoardPassengers(elevator, nextRequest.Passengers))
+                        {
+                            Console.WriteLine($"Elevator {elevator.Id} boarded {nextRequest.Passengers} passengers.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Elevator {elevator.Id} cannot board {nextRequest.Passengers} passengers. It's full!");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine($"Elevator {elevator.Id} cannot board {nextRequest.Passengers} passengers. It's full!");
+                        // If no more requests in this direction, break out of the loop
+                        break;
                     }
                 }
-                else
-                {
-                    Console.WriteLine("No available elevator found.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No requests left in the queue.");
             }
         }
     }

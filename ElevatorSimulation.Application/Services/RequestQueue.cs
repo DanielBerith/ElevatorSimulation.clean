@@ -1,4 +1,5 @@
 ﻿using ElevatorSimulation.Domain.Entities;
+using ElevatorSimulation.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,24 +18,27 @@ namespace ElevatorSimulation.Application.Services
             _requestQueue.Add(request);
         }
 
-        // Dequeue the nearest request based on elevator's current position
-        public Request DequeueNearestRequest(int currentFloor)
+        // Dequeue the nearest request based on elevator's current position and direction
+        public Request DequeueRequest(int currentFloor, Direction currentDirection)
         {
-            if (_requestQueue.Count == 0)
-                return null;
+            // Sort requests based on direction
+            List<Request> sortedRequests = _requestQueue
+                .OrderBy(r => Math.Abs(r.Floor - currentFloor)) // Sort by proximity to current floor
+                .ToList();
 
-            // Sort the requests by the absolute difference between current floor and requested floor
-            var nearestRequest = _requestQueue
-                .OrderBy(r => Math.Abs(r.Floor - currentFloor)) // Sort by the nearest floor
-                .FirstOrDefault(); // Get the nearest request
-
-            // Remove the selected request from the list
-            if (nearestRequest != null)
+            // First request decides the direction
+            if (currentDirection == Direction.Up)
             {
-                _requestQueue.Remove(nearestRequest);
+                // Prioritize requests that are above the current floor
+                return sortedRequests.FirstOrDefault(r => r.Floor >= currentFloor);
+            }
+            else if (currentDirection == Direction.Down)
+            {
+                // Prioritize requests that are below the current floor
+                return sortedRequests.LastOrDefault(r => r.Floor <= currentFloor);
             }
 
-            return nearestRequest;
+            return null;
         }
 
     }
