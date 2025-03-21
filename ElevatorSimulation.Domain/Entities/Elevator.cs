@@ -16,6 +16,8 @@ namespace ElevatorSimulation.Domain.Entities
         public int MaxCapacity { get; private set; }
         public ElevatorType Type { get; private set; }
 
+        public event Action<Elevator> ElevatorStatusChanged;
+
         public Elevator(int id, int initialFloor, int maxCapacity, ElevatorType type)
         {
             Id = id;
@@ -30,15 +32,18 @@ namespace ElevatorSimulation.Domain.Entities
         public Direction GetDirection() => Direction;
         public int GetOccupants() => Occupants;
         public int GetMaxCapacity() => MaxCapacity;
-
-        public bool TryBoardPassengers(int people)
+        protected virtual void OnElevatorStatusChanged()
         {
-            if (Occupants + people <= MaxCapacity)
-            {
-                Occupants += people;
-                return true;
-            }
-            return false; // Not enough space
+            ElevatorStatusChanged?.Invoke(this);
+        }
+
+        public (int boarded, int left) BoardPassengers(int people)
+        {
+            int available = MaxCapacity - Occupants;
+            int toBoard = Math.Min(people, available);
+            Occupants += toBoard;
+            OnElevatorStatusChanged();
+            return (toBoard, people - toBoard);
         }
 
         public virtual void MoveToFloor(int targetFloor)

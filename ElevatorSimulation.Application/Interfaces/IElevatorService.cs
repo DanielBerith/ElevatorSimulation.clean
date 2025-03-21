@@ -20,12 +20,16 @@ namespace ElevatorSimulation.Application.Interfaces
         void MoveElevator(Elevator elevator, int targetFloor);
 
         /// <summary>
-        /// Attempts to board passengers into the elevator.
+        /// Boards passengers into the elevator.
+        /// Returns a tuple: (number boarded, number left waiting).
         /// </summary>
-        /// <param name="elevator">The elevator where passengers will board.</param>
-        /// <param name="passengers">The number of passengers attempting to board.</param>
-        /// <returns>True if passengers were successfully boarded, otherwise false.</returns>
-        bool TryBoardPassengers(Elevator elevator, int passengers);
+        (int boarded, int left) BoardPassengers(Elevator elevator, int passengers);
+
+        /// <summary>
+        /// Processes the next request in the queue for the specified elevator.
+        /// </summary>
+        /// <param name="elevator">The elevator to process the next request for.</param>
+        void ProcessNextRequest(Elevator elevator);
     }
 
 }

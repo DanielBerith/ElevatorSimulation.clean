@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace ElevatorSimulation.Application.Services
 {
+    /// <summary>
+    /// A simple dispatching strategy that selects the nearest elevator regardless of type.
+    /// </summary>
     public class NearestElevatorStrategy : IDispatchingStrategy
     {
         public Elevator DispatchElevator(List<Elevator> elevators, int requestedFloor)
         {
-            // This strategy selects the nearest elevator based on the requested floor
             return elevators.OrderBy(e => Math.Abs(e.GetCurrentFloor() - requestedFloor)).FirstOrDefault();
         }
     }
