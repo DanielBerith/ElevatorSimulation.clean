@@ -8,38 +8,53 @@ using System.Threading.Tasks;
 
 namespace ElevatorSimulation.Application.Services
 {
+    /// <summary>
+    /// Manages a queue of elevator requests.
+    /// </summary>
     public class RequestQueue
     {
-        private List<Request> _requestQueue = new List<Request>();
+        private readonly List<Request> _requestQueue = new List<Request>();
 
-        // Enqueue a new request
+        /// <summary>
+        /// Enqueues a new elevator request.
+        /// </summary>
         public void EnqueueRequest(Request request)
         {
             _requestQueue.Add(request);
         }
 
-        // Dequeue the nearest request based on elevator's current position and direction
+        /// <summary>
+        /// Dequeues the nearest request based on the elevator's current floor and direction.
+        /// When idle, returns the nearest request regardless of direction.
+        /// </summary>
         public Request DequeueRequest(int currentFloor, Direction currentDirection)
         {
-            // Sort requests based on direction
+            if (_requestQueue.Count == 0)
+                return null;
+
+            // Sort by proximity.
             List<Request> sortedRequests = _requestQueue
-                .OrderBy(r => Math.Abs(r.Floor - currentFloor)) // Sort by proximity to current floor
+                .OrderBy(r => Math.Abs(r.Floor - currentFloor))
                 .ToList();
 
-            // First request decides the direction
-            if (currentDirection == Direction.Up)
+            Request selectedRequest = null;
+            if (currentDirection == Direction.Idle)
             {
-                // Prioritize requests that are above the current floor
-                return sortedRequests.FirstOrDefault(r => r.Floor >= currentFloor);
+                selectedRequest = sortedRequests.FirstOrDefault();
+            }
+            else if (currentDirection == Direction.Up)
+            {
+                selectedRequest = sortedRequests.FirstOrDefault(r => r.Floor >= currentFloor);
             }
             else if (currentDirection == Direction.Down)
             {
-                // Prioritize requests that are below the current floor
-                return sortedRequests.LastOrDefault(r => r.Floor <= currentFloor);
+                selectedRequest = sortedRequests.LastOrDefault(r => r.Floor <= currentFloor);
             }
 
-            return null;
-        }
+            if (selectedRequest != null)
+                _requestQueue.Remove(selectedRequest);
 
+            return selectedRequest;
+        }
     }
 }

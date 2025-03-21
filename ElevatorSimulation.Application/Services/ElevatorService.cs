@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace ElevatorSimulation.Application.Services
 {
+    /// <summary>
+    /// Provides operations to move an elevator and board passengers.
+    /// </summary>
     public class ElevatorService : IElevatorService
     {
         private readonly IDispatchingStrategy _dispatchingStrategy;
@@ -23,65 +26,56 @@ namespace ElevatorSimulation.Application.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Moves the given elevator to the target floor and logs the action.
+        /// </summary>
         public void MoveElevator(Elevator elevator, int targetFloor)
         {
             elevator.MoveToFloor(targetFloor);
             _logger.LogInformation("Elevator {0} moved to floor {1}", elevator.Id, targetFloor);
         }
 
-        public bool TryBoardPassengers(Elevator elevator, int passengers)
+        /// <summary>
+        /// Attempts to board passengers into the given elevator and logs the outcome.
+        /// </summary>
+        public (int boarded, int left) BoardPassengers(Elevator elevator, int passengers)
         {
-            bool success = elevator.TryBoardPassengers(passengers);
-            if (success)
+            var result = elevator.BoardPassengers(passengers);
+            if (result.boarded > 0)
             {
-                _logger.LogInformation("Elevator {0} boarded {1} passengers.", elevator.Id, passengers);
+                _logger.LogInformation("Elevator {0} boarded {1} passengers.", elevator.Id, result.boarded);
             }
-            else
+            if (result.left > 0)
             {
-                _logger.LogWarning("Elevator {0} cannot board {1} passengers. It's full!", elevator.Id, passengers);
+                _logger.LogWarning("Elevator {0} could not board {1} passengers due to capacity limits.", elevator.Id, result.left);
             }
-            return success;
+            return result;
         }
 
-        // Process requests by dispatching the nearest request in the queue based on current direction
+        /// <summary>
+        /// Processes the next request from the request queue for the specified elevator.
+        /// (This method is useful when an elevator is continuously processing queued requests.)
+        /// </summary>
         public void ProcessNextRequest(Elevator elevator)
         {
-            // Set initial direction based on the first request in the queue
+            // Determine initial direction from the first request; if idle, select the nearest.
             Direction currentDirection = Direction.Idle;
-
-            // Get the first request to decide the initial direction
             var firstRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
-
             if (firstRequest != null)
             {
                 currentDirection = firstRequest.Floor > elevator.GetCurrentFloor() ? Direction.Up : Direction.Down;
                 _logger.LogInformation("Elevator {0} direction set to {1}", elevator.Id, currentDirection);
 
-                // Process requests in the current direction
-                while (firstRequest != null)
+                Request nextRequest = firstRequest;
+                while (nextRequest != null)
                 {
-                    // Get the nearest request based on the current direction
-                    var nextRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
-                    if (nextRequest != null)
+                    MoveElevator(elevator, nextRequest.Floor);
+                    var boardingResult = BoardPassengers(elevator, nextRequest.Passengers);
+                    if (boardingResult.left > 0)
                     {
-                        // Move the elevator to the requested floor and log the action
-                        MoveElevator(elevator, nextRequest.Floor);
-
-                        // Attempt to board passengers and log the outcome
-                        if (TryBoardPassengers(elevator, nextRequest.Passengers))
-                        {
-                            _logger.LogInformation("Elevator {0} successfully boarded {1} passengers.", elevator.Id, nextRequest.Passengers);
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Elevator {0} failed to board {1} passengers due to capacity constraints.", elevator.Id, nextRequest.Passengers);
-                        }
+                        _logger.LogInformation("Elevator {0} boarded {1} passengers; {2} waiting.", elevator.Id, boardingResult.boarded, boardingResult.left);
                     }
-                    else
-                    {
-                        // No more requests in the current direction
-                        break;
-                    }
+                    nextRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
                 }
             }
             else
