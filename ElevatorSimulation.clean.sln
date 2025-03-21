@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Application", "ElevatorSimulation.Application\ElevatorSimulation.Application.csproj", "{E85AF5CA-A29C-4862-9727-338B4F719AE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorSimulation.Infrastructure", "ElevatorSimulation.Infrastructure\ElevatorSimulation.Infrastructure.csproj", "{2434957A-4129-4FE5-AFAD-8A85DA251135}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E85AF5CA-A29C-4862-9727-338B4F719AE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2434957A-4129-4FE5-AFAD-8A85DA251135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2434957A-4129-4FE5-AFAD-8A85DA251135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2434957A-4129-4FE5-AFAD-8A85DA251135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2434957A-4129-4FE5-AFAD-8A85DA251135}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{7A5E009A-47FF-449D-9221-123B29714845} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{58AE0F30-42DC-4C2B-BB0A-970DCE01B9FB} = {AD0212BE-CAB9-409F-9C1C-EDAB5A49AE64}
 		{E85AF5CA-A29C-4862-9727-338B4F719AE3} = {3241263C-F80F-4C61-BBC7-3030FAE0A2EE}
+		{2434957A-4129-4FE5-AFAD-8A85DA251135} = {7A5E009A-47FF-449D-9221-123B29714845}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F0EB68C-FAE3-4EF9-84C6-84EABA575A40}

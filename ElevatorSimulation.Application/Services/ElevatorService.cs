@@ -1,4 +1,5 @@
 ﻿using ElevatorSimulation.Application.Interfaces;
+using ElevatorSimulation.Application.Logging;
 using ElevatorSimulation.Domain.Entities;
 using ElevatorSimulation.Domain.Enums;
 using System;
@@ -13,25 +14,36 @@ namespace ElevatorSimulation.Application.Services
     {
         private readonly IDispatchingStrategy _dispatchingStrategy;
         private readonly RequestQueue _requestQueue;
+        private readonly IAppLogger<ElevatorService> _logger;
 
-        // Constructor takes both the dispatch strategy and the request queue
-        public ElevatorService(IDispatchingStrategy dispatchingStrategy, RequestQueue requestQueue)
+        public ElevatorService(IDispatchingStrategy dispatchingStrategy, RequestQueue requestQueue, IAppLogger<ElevatorService> logger)
         {
             _dispatchingStrategy = dispatchingStrategy;
             _requestQueue = requestQueue;
+            _logger = logger;
         }
 
         public void MoveElevator(Elevator elevator, int targetFloor)
         {
             elevator.MoveToFloor(targetFloor);
+            _logger.LogInformation("Elevator {0} moved to floor {1}", elevator.Id, targetFloor);
         }
 
         public bool TryBoardPassengers(Elevator elevator, int passengers)
         {
-            return elevator.TryBoardPassengers(passengers);
+            bool success = elevator.TryBoardPassengers(passengers);
+            if (success)
+            {
+                _logger.LogInformation("Elevator {0} boarded {1} passengers.", elevator.Id, passengers);
+            }
+            else
+            {
+                _logger.LogWarning("Elevator {0} cannot board {1} passengers. It's full!", elevator.Id, passengers);
+            }
+            return success;
         }
 
-        // Process requests by dispatching the nearest elevator for the next request in the queue
+        // Process requests by dispatching the nearest request in the queue based on current direction
         public void ProcessNextRequest(Elevator elevator)
         {
             // Set initial direction based on the first request in the queue
@@ -43,34 +55,38 @@ namespace ElevatorSimulation.Application.Services
             if (firstRequest != null)
             {
                 currentDirection = firstRequest.Floor > elevator.GetCurrentFloor() ? Direction.Up : Direction.Down;
-                Console.WriteLine($"Elevator {elevator.Id} direction set to {currentDirection}");
+                _logger.LogInformation("Elevator {0} direction set to {1}", elevator.Id, currentDirection);
 
-                // Move elevator based on the direction
+                // Process requests in the current direction
                 while (firstRequest != null)
                 {
                     // Get the nearest request based on the current direction
                     var nextRequest = _requestQueue.DequeueRequest(elevator.GetCurrentFloor(), currentDirection);
                     if (nextRequest != null)
                     {
-                        // Move the elevator to the requested floor
+                        // Move the elevator to the requested floor and log the action
                         MoveElevator(elevator, nextRequest.Floor);
 
-                        // Try to board passengers
+                        // Attempt to board passengers and log the outcome
                         if (TryBoardPassengers(elevator, nextRequest.Passengers))
                         {
-                            Console.WriteLine($"Elevator {elevator.Id} boarded {nextRequest.Passengers} passengers.");
+                            _logger.LogInformation("Elevator {0} successfully boarded {1} passengers.", elevator.Id, nextRequest.Passengers);
                         }
                         else
                         {
-                            Console.WriteLine($"Elevator {elevator.Id} cannot board {nextRequest.Passengers} passengers. It's full!");
+                            _logger.LogWarning("Elevator {0} failed to board {1} passengers due to capacity constraints.", elevator.Id, nextRequest.Passengers);
                         }
                     }
                     else
                     {
-                        // If no more requests in this direction, break out of the loop
+                        // No more requests in the current direction
                         break;
                     }
                 }
+            }
+            else
+            {
+                _logger.LogInformation("No request in the queue to process for Elevator {0}.", elevator.Id);
             }
         }
     }
