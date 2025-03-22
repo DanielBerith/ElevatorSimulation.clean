@@ -155,7 +155,7 @@ This will execute all unit tests using xUnit, ensuring that your services and di
 
 ## Dependencies
 
-- .NET 5.0 (or later)
+- .NET 6.0 (or later)
 - Microsoft.Extensions.DependencyInjection
 - Microsoft.Extensions.Logging
 - xUnit (for testing)
