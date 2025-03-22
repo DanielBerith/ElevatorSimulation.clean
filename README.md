@@ -1,7 +1,3 @@
-Below is an example README.md file for your Elevator Simulation project:
-
----
-
 # Elevator Simulation
 
 A challenging console application in C# that simulates the movement of elevators within a large building to optimize passenger transportation. The solution is built using Clean Architecture, SOLID principles, and object-oriented programming (OOP) concepts to ensure modularity, maintainability, and extensibility.
