@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Features\DispatchingStrategies\" />
-    <Folder Include="Features\RequestService\" />
   </ItemGroup>
 
 </Project>
